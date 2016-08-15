@@ -1,6 +1,11 @@
+"use strict";
+
 const config = require('./config');
 const Discord = require('discord.js');
+const Router = require('./router');
+
 var client = new Discord.Client();
+var cmdrouter;
 
 client.loginWithToken(config.token, function (error, token) {
     if (error) {
@@ -12,17 +17,9 @@ client.loginWithToken(config.token, function (error, token) {
 
 client.on('ready', function() {
     client.setStatusOnline();
+    cmdrouter = new Router(client);
 });
 
 client.on('message', function(message) {
-    if (message.content === "ping") {
-        client.reply(message, "pong! :)");
-    }
+    cmdrouter.route(message);
 });
-
-function exit() {
-    console.log("Exiting");
-    client.setStatusIdle();
-    client.logout();
-    process.exit();
-}
