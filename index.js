@@ -1,5 +1,6 @@
 "use strict";
 
+const logger = require('./logger')
 const config = require('./config');
 const Discord = require('discord.js');
 const Router = require('./router');
@@ -9,9 +10,9 @@ var cmdrouter;
 
 client.loginWithToken(config.token, function (error, token) {
     if (error) {
-        console.log("Failed to log in: " + error);
+        logger.info(`Failed to log in to Discord: ${error}`);
     } else {
-        console.log("Logged in successfully.");
+        logger.info("Logged in to Discord");
     }
 });
 

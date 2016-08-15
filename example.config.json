@@ -1,5 +1,7 @@
 {
     "token": "your_bot_token_here",
     "plugins": ["audio"],
-    "command_prefix": "!"
+    "command_prefix": "!",
+    "log": "./strawberry.log",
+    "debug": true
 }

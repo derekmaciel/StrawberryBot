@@ -8,6 +8,7 @@
     "main": "index.js",
 
     "dependencies": {
-        "discord.js": "latest"
+        "discord.js": "latest",
+        "winston": "latest"
     }
 }
