@@ -1,0 +1,13 @@
+{
+    "name": "strawberrybot",
+    "version": "0.0.1",
+    "description": "A music bot for Discord",
+    "license": "MIT",
+    "homepage": "https://github.com/derekmaciel/StrawberryBot",
+    "bugs": "https://github.com/derekmaciel/StrawberryBot/issues",
+    "main": "index.js",
+
+    "dependencies": {
+        "discord.js": "latest"
+    }
+}
