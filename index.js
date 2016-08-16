@@ -1,20 +1,9 @@
 "use strict";
 
-const logger = require('./logger')
-const config = require('./config');
-const Discord = require('discord.js');
+const client = require('./client');
 const Router = require('./router');
 
-var client = new Discord.Client();
 var cmdrouter;
-
-client.loginWithToken(config.token, function (error, token) {
-    if (error) {
-        logger.info(`Failed to log in to Discord: ${error}`);
-    } else {
-        logger.info("Logged in to Discord");
-    }
-});
 
 client.on('ready', function() {
     client.setStatusOnline();
