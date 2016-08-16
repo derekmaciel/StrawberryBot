@@ -1,19 +1,16 @@
 "use strict";
 
 const config = require('../config');
+const client = require('../client');
 
-class Base {
-    constructor(client) {
-        this.client = client;
-        this.commands = {
-            "info": this.info.bind(this)
-        }
+exports.COMMANDS = {
+    "info": {
+        help: "Display bot version",
+        callback: info
     }
+};
 
-    info(message) {
-        this.client.reply(message, `I am Strawberry Bot v${config.version}! ` +
-            "Nice to meet you!");
-    }
+function info(message) {
+    client.reply(message, `I am Strawberry Bot v${config.version}! ` +
+        "Nice to meet you!");
 }
-
-module.exports = Base;
