@@ -1,16 +1,14 @@
 "use strict";
 
-class Audio {
-    constructor(client) {
-        this.client = client;
-        this.commands = {
-            "ping": this.ping.bind(this)
-        }
-    }
+const client = require('../client');
 
-    ping(message) {
-        this.client.reply(message, "pong! :)");
+exports.COMMANDS = {
+    "ping": {
+        help: "Respond with 'pong'",
+        callback: ping
     }
+};
+
+function ping(message) {
+    client.reply(message, "pong! :)");
 }
-
-module.exports = Audio;
