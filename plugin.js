@@ -16,11 +16,12 @@ function get_all_commands(plugins) {
     var commands = new Map();
 
     for (let plugin of plugins) {
+        logger.debug(`Loading commands from plugin ${plugin}`);
         var plugin_commands = get_commands(plugin);
 
         for (let c in plugin_commands) {
             if (commands.has(c)) {
-                throw Error(`Command ${cmd} from plugin ${plugin} already ` + 
+                throw Error(`Command ${c} from plugin ${plugin} already ` + 
                     "loaded from another plugin.");
             }
             commands.set(c, plugin_commands[c]);
