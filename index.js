@@ -1,15 +1,12 @@
 "use strict";
 
 const client = require('./client');
-const Router = require('./router');
-
-var cmdrouter;
+const router = require('./router');
 
 client.on('ready', function() {
     client.setStatusOnline();
-    cmdrouter = new Router(client);
 });
 
 client.on('message', function(message) {
-    cmdrouter.route(message);
+    router.route(message);
 });

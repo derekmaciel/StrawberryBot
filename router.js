@@ -4,28 +4,31 @@ const config = require('./config');
 const logger = require('./logger');
 const plugin = require('./plugin');
 
-class Router {
-    constructor(client) {
-        this.client = client;
+var routes = get_routes();
 
-        // Load routes from plugins
-        var plugins = config.plugins;
-        plugins.unshift("base"); // Always load base
-        this.commands = plugin.get_all_commands(plugins);
-    }
+function route(message) {
+    message.content = message.content.trim();
 
-    route(message) {
-        message.content = message.content.trim();
-        if (message.content.startsWith(config.command_prefix)) {
-            // Find the command that corresponds to this message
-            for (let cmd of this.commands.keys()) {
-                if (message.content.startsWith(config.command_prefix + cmd)) {
-                    logger.info(`${message.author.username}: ${cmd}`);
-                    this.commands.get(cmd).callback(message);
-                }
+    if (message.content.startsWith(config.command_prefix)) {
+        // Find the command that corresponds to this message
+        for (let cmd of routes.keys()) {
+            if (message.content.startsWith(config.command_prefix + cmd)) {
+                logger.info(`${message.author.username}: ${cmd}`);
+                routes.get(cmd).callback(message);
+                return;
             }
         }
+
+        logger.debug(`No route found for message: '${message.content}'`);
     }
 }
 
-module.exports = Router;
+function get_routes() {
+    var plugins = config.plugins;
+    plugins.unshift("base"); // Always load base
+    return plugin.get_all_commands(plugins);
+}
+
+module.exports = {
+    route: route
+};
