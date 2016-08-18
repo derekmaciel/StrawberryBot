@@ -27,7 +27,16 @@ function route(message) {
 
 function get_args(s, cmd) {
     s = s.slice(cmd.length).trim();
-    var argv = require('minimist')(s.split(' '));
+    var argv = require('minimist')(s.split(' '), {
+        boolean: true // treat '--' options without = (like --test) as boolean 
+    });
+
+    // Strange behavior -- if no options are given, argv = { '_': [''] }
+    // Remove that empty entry
+    if (argv['_'].length == 1 && argv['_'][0] == '') {
+        argv['_'].pop();
+    }
+    
     return argv;
 }
 
