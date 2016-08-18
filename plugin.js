@@ -1,6 +1,7 @@
 "use strict";
 
 const logger = require('./logger');
+const config = require('./config')
 
 function get_plugin(name) {
     var p = require('./plugins/' + name);
@@ -12,8 +13,13 @@ function get_commands(plugin_name) {
     return p.COMMANDS;
 };
 
-function get_all_commands(plugins) {
+function get_all_commands() {
     var commands = new Map();
+    var plugins = config.plugins;
+
+    if (plugins.indexOf("base") == -1) {
+        plugins.unshift("base"); // Always load base
+    }
 
     for (let plugin of plugins) {
         logger.debug(`Loading commands from plugin ${plugin}`);
@@ -21,8 +27,8 @@ function get_all_commands(plugins) {
 
         for (let c in plugin_commands) {
             if (commands.has(c)) {
-                throw Error(`Command ${c} from plugin ${plugin} already ` + 
-                    "loaded from another plugin.");
+                throw Error(`Command name collision: Command ${c} from plugin ` +
+                    `${plugin} already loaded from another plugin.`);
             }
             commands.set(c, plugin_commands[c]);
         }

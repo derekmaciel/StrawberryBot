@@ -4,7 +4,7 @@ const config = require('./config');
 const logger = require('./logger');
 const plugin = require('./plugin');
 
-var routes = get_routes();
+var routes = plugin.get_all_commands();
 
 function route(message) {
     message.content = message.content.trim();
@@ -23,12 +23,6 @@ function route(message) {
 
         logger.debug(`No route found for message: '${message.content}'`);
     }
-}
-
-function get_routes() {
-    var plugins = config.plugins;
-    plugins.unshift("base"); // Always load base
-    return plugin.get_all_commands(plugins);
 }
 
 function get_args(s, cmd) {
