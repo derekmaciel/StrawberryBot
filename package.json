@@ -10,6 +10,7 @@
     "dependencies": {
         "discord.js": "latest",
         "winston": "latest",
-        "youtube-dl": "latest"
+        "youtube-dl": "latest",
+        "minimist": "latest"
     }
 }

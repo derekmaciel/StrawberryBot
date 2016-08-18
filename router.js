@@ -12,9 +12,11 @@ function route(message) {
     if (message.content.startsWith(config.command_prefix)) {
         // Find the command that corresponds to this message
         for (let cmd of routes.keys()) {
-            if (message.content.startsWith(config.command_prefix + cmd)) {
+            var command_string = config.command_prefix + cmd;
+            if (message.content.startsWith(command_string)) {
                 logger.info(`${message.author.username}: ${cmd}`);
-                routes.get(cmd).callback(message);
+                var args = get_args(message.content, command_string);
+                routes.get(cmd).callback(message, args);
                 return;
             }
         }
@@ -27,6 +29,12 @@ function get_routes() {
     var plugins = config.plugins;
     plugins.unshift("base"); // Always load base
     return plugin.get_all_commands(plugins);
+}
+
+function get_args(s, cmd) {
+    s = s.slice(cmd.length).trim();
+    var argv = require('minimist')(s.split(' '));
+    return argv;
 }
 
 module.exports = {
