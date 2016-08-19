@@ -26,14 +26,23 @@ function play(message, args) {
     ]);
 
     var path;
+    var size;
 
     video.on('info', function(info) {
         hash.update(info._filename);
         var filename = hash.digest('hex');
         path = `audio-cache/${filename}.mp3`;
+        size = info.size;
         var megs = info.size / Math.pow(1024, 2);
         
         logger.info(`Downloading ${info._filename} to ${path} size: ${megs}`);
+    });
+
+    var pos = 0;
+    video.on('data', function (chunk) {
+        pos += chunk.length;
+        var progress = ((pos / size) * 100).toFixed(2);
+        logger.debug(`Progress: ${progress}`);
     });
 
     video.on('end', function() {
