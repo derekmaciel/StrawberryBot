@@ -29,8 +29,10 @@ function play(message, args) {
 
     video.on('info', function(info) {
         hash.update(info._filename);
-        path = `audio-cache/${hash.toString('hex')}.mp3`;
+        var filename = hash.digest('hex');
+        path = `audio-cache/${filename}.mp3`;
         var megs = info.size / Math.pow(1024, 2);
+        
         logger.info(`Downloading ${info._filename} to ${path} size: ${megs}`);
     });
 
