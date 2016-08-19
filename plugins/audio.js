@@ -47,16 +47,43 @@ function play(message, args) {
 
     video.on('end', function() {
         logger.info(`Download complete.`);
-        client.joinVoiceChannel("166094007712088064", function(error, connection) {
-            if (error) {
-                logger.info(`Could not join voice channel: ${error}`);
-            } else {
-                connection.playRawStream(video);
-            }
-        });
+        play_file(video);
     });
 
     video.on('error', function(error) {
         logger.info(`Could not download video: ${error}`);
     });
+}
+
+function play_file(path) {
+    var id = "166094007712088064";
+    join_voice_channel(id);
+    var p = client.voiceConnection.playRawStream(path, {}, function() {
+        console.log("Begun playback");
+    });
+
+    p.on('error', function(error) {
+        console.log(error);
+    });
+
+    p.on('end', function() {
+        console.log('done.');
+    });
+}
+
+function join_voice_channel(id) {
+    var timer = setInterval(function() {
+        if (typeof client.voiceConnection === 'undefined' || 
+                                client.voiceConnection.voiceChannel.id != id) {
+            client.joinVoiceChannel(id, function(error, connection) {
+                if (error) {
+                    logger.info(`Could not join voice channel: ${error}`);
+                } else {
+                    console.log("joined");
+                }
+            });
+        } else {
+            clearInterval(timer);
+        }
+    }, 3000);
 }
