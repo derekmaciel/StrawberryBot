@@ -36,7 +36,7 @@ function play(message, args) {
         logger.info(`Downloading ${info._filename} to ${path} size: ${megs}`);
     });
 
-    video.on('end', function(info) {
+    video.on('end', function() {
         logger.info(`Download complete.`);
         video.pipe(fs.createWriteStream(path));
 
