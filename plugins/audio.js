@@ -41,8 +41,6 @@ function play(message, args) {
         video.pipe(stream);
     });
 
-    
-
     var pos = 0;
     video.on('data', function (chunk) {
         pos += chunk.length;
@@ -52,39 +50,12 @@ function play(message, args) {
 
     video.on('end', function() {
         logger.info(`Download complete.`);
-        play_file(path);
+        client.joinVoiceChannel(id, function(error, connection) {
+            var p = client.voiceConnection.playFile(path, {volume: 0.25});
+        });
     });
 
     video.on('error', function(error) {
         logger.info(`Could not download video: ${error}`);
     });
-}
-
-function play_file(path) {
-    var id = "166094007712088064";
-    var timer = setInterval(function() {
-        if (typeof client.voiceConnection === 'undefined' || 
-                                client.voiceConnection.voiceChannel.id != id) {
-            client.joinVoiceChannel(id, function(error, connection) {
-                if (error) {
-                    logger.info(`Could not join voice channel: ${error}`);
-                } else {
-                    console.log("joined");
-                    var p = client.voiceConnection.playFile(path, {}, function() {
-                        console.log("Begun playback");
-                    });
-
-                    p.on('error', function(error) {
-                        console.log(error);
-                    });
-
-                    p.on('end', function() {
-                        console.log('done.');
-                    });
-                }
-            });
-        } else {
-            clearInterval(timer);
-        }
-    }, 3000);
 }
