@@ -47,14 +47,16 @@ function play(message, args) {
 
     video.on('end', function() {
         logger.info(`Download complete.`);
-        video.pipe(fs.createWriteStream(path));
-
-        client.joinVoiceChannel("166094007712088064", function(error, connection) {
-            if (error) {
-                logger.info(`Could not join voice channel: ${error}`);
-            } else {
-                client.voiceConnection.playFile(path);
-            }
+        video.pipe(fs.createWriteStream(path)).then(function (v) {
+            client.joinVoiceChannel("166094007712088064", function(error, connection) {
+                if (error) {
+                    logger.info(`Could not join voice channel: ${error}`);
+                } else {
+                    client.voiceConnection.playFile(path);
+                }
+            });
+        }, function (reason) {
+            logger.info(`Failed to save file ${path}: ${reason}`);
         });
     });
 
