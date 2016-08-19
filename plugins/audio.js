@@ -47,7 +47,12 @@ function play(message, args) {
 
     video.on('end', function() {
         logger.info(`Download complete.`);
-        play_file(video);
+        var stream = fs.createWriteStream(path);
+        video.pipe(stream);
+        stream.on('finish', function () {
+            logger.debug('${path} saved.');
+            play_file(path);
+        });
     });
 
     video.on('error', function(error) {
@@ -65,7 +70,7 @@ function play_file(path) {
                     logger.info(`Could not join voice channel: ${error}`);
                 } else {
                     console.log("joined");
-                    var p = client.voiceConnection.playRawStream(path, {}, function() {
+                    var p = client.voiceConnection.playFile(path, {}, function() {
                         console.log("Begun playback");
                     });
 
