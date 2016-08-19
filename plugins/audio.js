@@ -38,6 +38,9 @@ function play(message, args) {
         logger.info(`Downloading ${info._filename} to ${path} size: ${megs}`);
     });
 
+    var stream = fs.createWriteStream(path);
+    video.pipe(stream);
+
     var pos = 0;
     video.on('data', function (chunk) {
         pos += chunk.length;
@@ -47,12 +50,7 @@ function play(message, args) {
 
     video.on('end', function() {
         logger.info(`Download complete.`);
-        var stream = fs.createWriteStream(path);
-        video.pipe(stream);
-        stream.on('finish', function () {
-            logger.debug('${path} saved.');
-            play_file(path);
-        });
+        play_file(path);
     });
 
     video.on('error', function(error) {
