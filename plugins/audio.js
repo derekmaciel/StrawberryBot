@@ -48,4 +48,8 @@ function play(message, args) {
             }
         });
     });
+
+    video.on('error', function(error) {
+        logger.info(`Could not download video: ${error}`);
+    });
 }
