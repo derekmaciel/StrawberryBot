@@ -36,10 +36,12 @@ function play(message, args) {
         var megs = info.size / Math.pow(1024, 2);
         
         logger.info(`Downloading ${info._filename} to ${path} size: ${megs}`);
+
+        var stream = fs.createWriteStream(path);
+        video.pipe(stream);
     });
 
-    var stream = fs.createWriteStream(path);
-    video.pipe(stream);
+    
 
     var pos = 0;
     video.on('data', function (chunk) {
