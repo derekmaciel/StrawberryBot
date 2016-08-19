@@ -50,7 +50,7 @@ function play(message, args) {
 
     video.on('end', function() {
         logger.info(`Download complete.`);
-        client.joinVoiceChannel(id, function(error, connection) {
+        client.joinVoiceChannel("166094007712088064", function(error, connection) {
             var p = client.voiceConnection.playFile(path, {volume: 0.25});
         });
     });
