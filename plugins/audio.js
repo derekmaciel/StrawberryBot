@@ -43,13 +43,6 @@ function play(message, args) {
     var stream = fs.createWriteStream(path);
     video.pipe(stream);    
 
-    var pos = 0;
-    video.on('data', function (chunk) {
-        pos += chunk.length;
-        var progress = ((pos / size) * 100).toFixed(2);
-        logger.debug(`Progress: ${progress}`);
-    });
-
     video.on('end', function() {
         logger.info(`Download complete.`);
         client.joinVoiceChannel("166094007712088064", function(error, connection) {
