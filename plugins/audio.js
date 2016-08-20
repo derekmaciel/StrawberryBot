@@ -20,26 +20,28 @@ function play(message, args) {
         return;
     }
 
-    var video = youtubedl(args['_'][0], [
-        '--extract-audio', 
-        '--audio-format', 'mp3'
-    ]);
-
+    var url = args['_'][0];
     var path;
-    var size;
 
-    video.on('info', function(info) {
+    youtubedl.getInfo(url, [], function(error, info) {
+        if (error) {
+            console.warn(`Failed to get info for url ${url}: ${error}`);
+            return;
+        }
+
+        var megs = (info.size / Math.pow(1024, 2)).toFixed(2);
+
         hash.update(info._filename);
         var filename = hash.digest('hex');
         path = `audio-cache/${filename}.mp3`;
-        size = info.size;
-        var megs = info.size / Math.pow(1024, 2);
         
-        logger.info(`Downloading ${info._filename} to ${path} size: ${megs}`);
-
-        var stream = fs.createWriteStream(path);
-        video.pipe(stream);
+        logger.info(`Downloading ${info._filename} (${megs}mb) to ${path}`);
     });
+
+    var video = youtubedl(url, ['--extract-audio', '--audio-format', 'mp3']);
+
+    var stream = fs.createWriteStream(path);
+    video.pipe(stream);    
 
     var pos = 0;
     video.on('data', function (chunk) {
