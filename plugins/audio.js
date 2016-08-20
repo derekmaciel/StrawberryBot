@@ -2,8 +2,6 @@
 
 const client = require('../client');
 const fs = require('fs');
-const crypto = require('crypto');
-const hash = crypto.createHash('sha256')
 const youtubedl = require('youtube-dl');
 const logger = require('../logger');
 
@@ -42,7 +40,7 @@ function play(message, args) {
 
         var megs = (info.size / Math.pow(1024, 2)).toFixed(2);
 
-        hash.update(info._filename);
+        var hash = require('crypto').crypto.createHash('sha256').update(info._filename);
         var filename = hash.digest('hex');
         path = `audio-cache/${filename}.mp3`;
 
