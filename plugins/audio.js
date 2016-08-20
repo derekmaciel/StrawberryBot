@@ -11,8 +11,22 @@ exports.COMMANDS = {
     "play": {
         help: "Play a youtube video",
         callback: play
+    },
+    "stop": {
+        help: "Stop playing the current song",
+        callback: stop
     }
 };
+
+function stop(message, args) {
+    var vc = client.voiceConnection;
+
+    if (typeof vc === 'undefined' || !vc.playing) {
+        client.reply(message, "I'm not playing anything :confused:");
+    } else if (typeof vc != 'undefined') {
+        vc.stopPlaying();
+    }
+}
 
 function play(message, args) {
     if (args['_'].length == 0) {
