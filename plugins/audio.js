@@ -40,7 +40,7 @@ function play(message, args) {
 
         var megs = (info.size / Math.pow(1024, 2)).toFixed(2);
 
-        var hash = require('crypto').crypto.createHash('sha256').update(info._filename);
+        var hash = require('crypto').createHash('sha256').update(info._filename);
         var filename = hash.digest('hex');
         path = `audio-cache/${filename}.mp3`;
 
