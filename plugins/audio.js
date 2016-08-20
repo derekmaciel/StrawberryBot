@@ -109,6 +109,11 @@ function play_file(path) {
 
             stream.on('end', function () {
                 logger.debug(`Playback finished.`);
+
+                if (isLooped) {
+                    logger.debug(`Loop enabled, restarting playback`);
+                    play_file(path);
+                }
             });
         });
     });
