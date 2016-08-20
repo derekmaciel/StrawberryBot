@@ -38,15 +38,13 @@ function play(message, args) {
     youtubedl.getInfo(url, [], function(error, info) {
         if (error) return console.warn(`Failed to get info for url ${url}: ${error}`);
 
-        var megs = (info.size / Math.pow(1024, 2)).toFixed(2);
-
         var hash = require('crypto').createHash('sha256').update(info._filename);
         var filename = hash.digest('hex');
         path = `audio-cache/${filename}.mp3`;
 
         fs.access(path, fs.F_OK, function (error) {
             if (error) {
-                logger.info(`Downloading video (${megs}mb) to ${path}`);
+                logger.debug(`Video ${url} not cached, downloading`);
                 download_file_then_play(url, path);
             } else {
                 logger.debug(`Video already downloaded (${path}), using cached file`);
@@ -61,6 +59,11 @@ function download_file_then_play(url, path) {
 
     var stream = fs.createWriteStream(path);
     video.pipe(stream);
+
+    video.on('info', function(error, info) {
+        var megs = (info.size / Math.pow(1024, 2)).toFixed(2);
+        logger.info(`Downloading video (${megs}mb) to ${path}`);
+    });
 
     video.on('end', function() {
         logger.info(`Download complete.`);
