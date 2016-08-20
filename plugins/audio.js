@@ -32,7 +32,7 @@ function play(message, args) {
         var filename = hash.digest('hex');
         path = `audio-cache/${filename}.mp3`;
 
-        fs.access(path, fs.constants.F_OK, function (error) {
+        fs.access(path, fs.F_OK, function (error) {
             if (error) {
                 logger.info(`Downloading video (${megs}mb) to ${path}`);
                 download_file_then_play(url, path);
