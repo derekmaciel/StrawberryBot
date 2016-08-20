@@ -13,16 +13,35 @@ exports.COMMANDS = {
     "stop": {
         help: "Stop playing the current song",
         callback: stop
+    },
+    "loop": {
+        help: "Toggle loop on current song",
+        callback: loop
     }
 };
 
-function stop(message, args) {
-    var vc = client.voiceConnection;
+var isLooped = false;
 
-    if (typeof vc === 'undefined' || !vc.playing) {
+function loop(message, args) {
+    if (is_currently_playing()) {
+        if (isLooped) {
+            client.reply(message, "Stopping loop!");
+        } else {
+            client.reply(message, "Looping the current song!");
+        }
+
+        isLooped = !isLooped;
+    } else {
         client.reply(message, "I'm not playing anything :confused:");
-    } else if (typeof vc != 'undefined') {
+    }
+}
+
+function stop(message, args) {
+    if (is_currently_playing()) {
+        client.reply(message, "Got it, stopping current song.");
         vc.stopPlaying();
+    } else {
+        client.reply(message, "I'm not playing anything :confused:");
     }
 }
 
@@ -93,4 +112,9 @@ function play_file(path) {
             });
         });
     });
+}
+
+function is_currently_playing() {
+    return (typeof client.voiceConnection != 'undefined') && 
+        client.voiceConnection.playing;
 }
