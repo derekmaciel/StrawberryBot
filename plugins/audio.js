@@ -78,6 +78,17 @@ function play_file(path) {
     client.joinVoiceChannel("166094007712088064", function(error, connection) {
         if (error) return logger.warn(`Could not join voice channel: ${error}`);
 
-        connection.playFile(path, {volume: 0.25});
+        connection.playFile(path, {volume: 0.25}, function(error, stream) {
+            logger.debug(`Playing ${path}`);
+            if (error) return logger.warn(`Encoding error: ${error}`);
+
+            stream.on('error', function (error) {
+                logger.warn(`Error during playback: ${error}`);
+            });
+
+            stream.on('end', function () {
+                logger.debug(`Playback finished.`);
+            });
+        });
     });
 }
