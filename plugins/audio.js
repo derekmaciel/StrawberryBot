@@ -77,10 +77,11 @@ function download_file_then_play(url, path) {
 function play_file(path) {
     client.joinVoiceChannel("166094007712088064", function(error, connection) {
         if (error) return logger.warn(`Could not join voice channel: ${error}`);
+        logger.debug(`Joined voice channel ${connection.voiceChannel.name}`);
 
         connection.playFile(path, {volume: 0.25}, function(error, stream) {
+            if (error) return logger.warn(`Could not play ${path}: ${error}`);
             logger.debug(`Playing ${path}`);
-            if (error) return logger.warn(`Encoding error: ${error}`);
 
             stream.on('error', function (error) {
                 logger.warn(`Error during playback: ${error}`);
