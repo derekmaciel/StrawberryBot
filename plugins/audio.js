@@ -40,6 +40,9 @@ function stop(message, args) {
     if (is_currently_playing()) {
         client.reply(message, "Got it, stopping current song.");
         vc.stopPlaying();
+
+        // Stop loop if it's currently enabled
+        isLooped = false;
     } else {
         client.reply(message, "I'm not playing anything :confused:");
     }
