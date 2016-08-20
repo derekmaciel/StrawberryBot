@@ -60,7 +60,7 @@ function download_file_then_play(url, path) {
     var stream = fs.createWriteStream(path);
     video.pipe(stream);
 
-    video.on('info', function(error, info) {
+    video.on('info', function(info) {
         var megs = (info.size / Math.pow(1024, 2)).toFixed(2);
         logger.info(`Downloading video (${megs}mb) to ${path}`);
     });
