@@ -21,6 +21,23 @@ exports.COMMANDS = {
 };
 
 var isLooped = false;
+var pausedFromInactivity = false;
+
+// Stop playing music if no one is in the voice channel anymore
+client.on('voiceLeave', function (channel, user) {
+    if (is_currently_playing() && client.voiceConnection.voiceChannel.members.length == 0) {
+        logger.info("Pausing playback due to empty voice channel");
+        pausedFromInactivity = true;
+        client.voiceConnection.pause();
+    }
+});
+client.on('voiceJoin', function (channel, user) {
+    if (pausedFromInactivity) {
+        logger.info("Playback resumed: voice channel no longer empty");
+        pausedFromInactivity = false;
+        client.voiceConnection.resume();
+    }
+});
 
 function loop(message, args) {
     if (is_currently_playing()) {
